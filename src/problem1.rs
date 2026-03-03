@@ -52,9 +52,26 @@ mod test {
     use crate::problem1::average;
 
     #[test]
-    pub fn test_average() {
-        let test_vec_one = vec![];
+    pub fn test_avg_empty() {
+        let test_vec_empty = vec![];
+        let test_empty = average(&test_vec_empty);
+        assert_eq!(-1, test_empty, "Expect to receive -1 for empty vec")
+    }
+
+    #[test]
+    pub fn test_avg_one() {
+        let test_vec_one = vec![250];
         let test_one = average(&test_vec_one);
-        assert_eq!(-1, test_one, "Expect to receive -1 for empty vec")
+        assert_eq!(
+            250, test_one,
+            "Expect to receive single item for single item vec"
+        )
+    }
+
+    #[test]
+    pub fn test_avg_three() {
+        let test_vec_three = vec![250, 100, 105];
+        let test_three = average(&test_vec_three);
+        assert_eq!(151, test_three, "Expected 151");
     }
 }
