@@ -29,7 +29,7 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
     return count;
 }
 
-//how would i memoize this...perhaps need a pair?
+//how would i memoize this...perhaps need a pair? or...a hashmap?
 static mut avg_memoized: (i32, i32) = (0, 0);
 ///Return avg of the array
 fn average(previous_resp_times: &Vec<i32>) -> i32 {
@@ -49,7 +49,7 @@ fn average(previous_resp_times: &Vec<i32>) -> i32 {
 
 #[cfg(test)]
 mod test {
-    use crate::problem1::average;
+    use crate::problem1::{average, countResponseTimeRegressions};
 
     #[test]
     pub fn test_avg_empty() {
@@ -73,5 +73,12 @@ mod test {
         let test_vec_three = vec![250, 100, 105];
         let test_three = average(&test_vec_three);
         assert_eq!(151, test_three, "Expected 151");
+    }
+
+    #[test]
+    pub fn test_response_time_regressions() {
+        let response_times = vec![100, 200, 150, 300];
+        let count = countResponseTimeRegressions(&response_times);
+        assert_eq!(2, count, "Expected count to be 2");
     }
 }
