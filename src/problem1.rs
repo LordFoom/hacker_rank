@@ -1,9 +1,7 @@
 use std::{
     io::{self, BufRead},
     ops::Div,
-};
-
-/*
+}; /*
  * Complete the 'countResponseTimeRegressions' function below.
  *
  * The function is expected to return an INTEGER.
@@ -20,7 +18,7 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
             continue;
         }
         let avg = average(&previous_resp_times);
-        if response_time > &avg {
+        if *response_time as i64 > avg {
             count += 1;
         }
         previous_resp_times.push(response_time.to_owned());
@@ -30,21 +28,24 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
 }
 
 //how would i memoize this...perhaps need a pair? or...a hashmap?
-static mut avg_memoized: (i32, i32) = (0, 0);
+// static mut avg_memoized: (i32, i32) = (0, 0);
+static mut AVG_MEMOIZED: (i32, i32) = (0, 0);
+//keep the total running
+static mut RUNNING_TOTAL: i32 = 0;
 ///Return avg of the array
-fn average(previous_resp_times: &Vec<i32>) -> i32 {
+fn average(previous_resp_times: &Vec<i32>) -> i64 {
     if previous_resp_times.is_empty() {
         return -1;
     };
     let sz = previous_resp_times.len();
     if sz == 1 {
-        return previous_resp_times.first().unwrap().to_owned();
+        return previous_resp_times.first().unwrap().to_owned() as i64;
     }
 
     previous_resp_times
         .iter()
-        .fold(0, |acc, rt| acc + rt)
-        .div(sz as i32)
+        .fold(0i64, |acc, rt| acc + *rt as i64)
+        .div(sz as i64)
 }
 
 #[cfg(test)]
