@@ -25,26 +25,38 @@ fn findSmallestMissingPositive(order_numbers: &[i32]) -> i32 {
     if order_numbers.is_empty() {
         return 0;
     }
+    // let mut positive_ints = BTreeMap::new();
     let mut positive_ints = BTreeMap::new();
 
-    let smallest_positive_int = order_numbers[0];
-
+    //if there is only 1 integer passed in,
+    //and then it is either 1 or 2 that is smallest positive int
     if order_numbers.len() == 1 {
-        if smallest_positive_int == 1 {
+        if order_numbers[0] == 1 {
             return 2;
         } else {
             return 1;
         }
     }
 
-    for i in 1..order_numbers.len() {
-        if order_numbers[i] < smallest_positive_int {
-            smallest_positive_int = order_numbers[i];
+    let mut smallest_positive_int = i32::MAX;
+    let mut next_positive_int = i32::MAX;
+
+    for int in order_numbers {
+        //negative numbers do not matter
+        if int < 0 {
+            continue;
+        }
+        if smallest_positive_int > int {
+            next_positive_int = smallest_positive_int;
+            smallest_positive_int = int;
+        } else if next_positive_int > int {
+            next_positive_int = int;
         }
     }
-    // for (i, number) in order_numbers {
-    //     if i == 0 {
-    //         smallest_positive_int = number;
-    //     }
-    // }
+
+    println!(
+        "smallest_positive_int={smallest_positive_int}, next_positive_int={next_positive_int}"
+    );
+
+    for i in smallest_positive_int..next_positive_int {}
 }
