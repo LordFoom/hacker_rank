@@ -1,4 +1,3 @@
-use std::collections::BTreeMap;
 ///Find the Smallest Missing Positive Integer
 ///Given an unsorted array of integers, find the smallest positive integer not present in the array in O(n) time and O(1) extra space.
 ///
@@ -9,24 +8,12 @@ use std::collections::BTreeMap;
  * The function accepts INTEGER_ARRAY orderNumbers as parameter.
  */
 
-fn findSmallestMissingPositive(order_numbers: &[i32]) -> i32 {
-    // let mut positive_ints = Hashmap::from([
-    //     (1, false),
-    //     (2, false),
-    //     (3, false),
-    //     (4, false),
-    //     (5, false),
-    //     (6, false),
-    //     (7, false),
-    //     (8, false),
-    //     (9, false),
-    // ]);
+fn findSmallestMissingPositive(orderNumbers: &[i32]) -> i32 {
+    let mut order_numbers = Vec::from(orderNumbers);
 
     if order_numbers.is_empty() {
         return 0;
     }
-    // let mut positive_ints = BTreeMap::new();
-    let mut positive_ints = BTreeMap::new();
 
     //if there is only 1 integer passed in,
     //and then it is either 1 or 2 that is smallest positive int
@@ -38,25 +25,89 @@ fn findSmallestMissingPositive(order_numbers: &[i32]) -> i32 {
         }
     }
 
-    let mut smallest_positive_int = i32::MAX;
-    let mut next_positive_int = i32::MAX;
+    //apparently all this is bullshit, we should be using cycle sort - would I have worked that out
+    //in enough time? Who knows - I do, I would not have
 
-    for int in order_numbers {
-        //negative numbers do not matter
-        if int < 0 {
-            continue;
-        }
-        if smallest_positive_int > int {
-            next_positive_int = smallest_positive_int;
-            smallest_positive_int = int;
-        } else if next_positive_int > int {
-            next_positive_int = int;
+    for i in 0..order_numbers.len() {
+        while order_numbers[i] >= 1
+            && order_numbers[i] <= order_numbers.len() as i32
+            && order_numbers[i] != order_numbers[(order_numbers[i] - 1) as usize]
+        {
+            //the -1 is why we use the order_numbers
+            let idx = (order_numbers[i] - 1) as usize;
+            order_numbers.swap(idx, i);
         }
     }
 
-    println!(
-        "smallest_positive_int={smallest_positive_int}, next_positive_int={next_positive_int}"
-    );
+    let smallest_positive_int = (0..order_numbers.len())
+        .find(|&i| i + 1 != order_numbers[i] as usize)
+        .map(|num_opt| num_opt + 1)
+        .unwrap_or(order_numbers.len() + 1);
 
-    for i in smallest_positive_int..next_positive_int {}
+    smallest_positive_int as i32
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_array() {
+        let mut arr = [];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 0);
+    }
+
+    #[test]
+    fn test_single_element_one() {
+        let mut arr = [1];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 2);
+    }
+
+    #[test]
+    fn test_single_element_not_one() {
+        let mut arr = [5];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 1);
+    }
+
+    #[test]
+    fn test_missing_one() {
+        let mut arr = [2, 3, 4, 5];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 1);
+    }
+
+    #[test]
+    fn test_gap_in_middle() {
+        let mut arr = [1, 2, 4, 5];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 3);
+    }
+
+    #[test]
+    fn test_all_present() {
+        let mut arr = [1, 2, 3, 4, 5];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 6);
+    }
+
+    #[test]
+    fn test_unsorted() {
+        let mut arr = [3, 1, 5, 2];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 4);
+    }
+
+    #[test]
+    fn test_with_negatives_and_zeros() {
+        let mut arr = [-1, 0, 1, 2];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 3);
+    }
+
+    #[test]
+    fn test_duplicates() {
+        let mut arr = [1, 1, 2, 2];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 3);
+    }
+
+    #[test]
+    fn test_large_numbers_only() {
+        let mut arr = [100, 200, 300];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 1);
+    }
 }
