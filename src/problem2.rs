@@ -12,7 +12,7 @@ fn findSmallestMissingPositive(orderNumbers: &[i32]) -> i32 {
     let mut order_numbers = Vec::from(orderNumbers);
 
     if order_numbers.is_empty() {
-        return 0;
+        return 1;
     }
 
     //if there is only 1 integer passed in,
@@ -108,6 +108,12 @@ mod tests {
     #[test]
     fn test_large_numbers_only() {
         let mut arr = [100, 200, 300];
+        assert_eq!(findSmallestMissingPositive(&mut arr), 1);
+    }
+
+    #[test]
+    fn test_single_element_zero() {
+        let mut arr = [0];
         assert_eq!(findSmallestMissingPositive(&mut arr), 1);
     }
 }
