@@ -10,12 +10,23 @@ use std::io::{self, BufRead};
 fn isAlphabeticPalindrome(code: &str) -> bool {
     //first we extract only letters
     let letters = extract_letters(code);
-    //then we extract
+    //now we check for palindrome
+    let left = letters.iter();
+    let right = letters.iter().rev();
+
+    for (l, r) in left.zip(right) {
+        if l != r {
+            return false;
+        }
+    }
+    return true;
 }
 
+///Extract only the letters, downcased
 fn extract_letters(code: &str) -> Vec<char> {
     code.chars()
         .into_iter()
         .filter(|c| c.is_ascii_alphabetic())
+        .map(|c| c.to_ascii_lowercase())
         .collect()
 }
