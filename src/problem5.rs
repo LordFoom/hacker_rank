@@ -22,22 +22,62 @@ Return a single INTEGER: the 0-based index of target in nums if it exists; other
  */
 
 fn binarySearch(nums: &[i32], target: i32) -> i32 {
-    // Write your code here
-    let index = nums.len() / 2;
-    let test_num = nums[index];
+    let mut left = 0;
+    let mut right = nums.len();
 
-    if test_num == target {
-        return index;
-    }
-
-    if test_num < target {
-        return binarySearch(nums[0..index], target);
-    }
-
-    if test_num > target {
-        return binarySearch(nums[index..nums.len()], target);
-    }
-
-    return -1;
+    for candidate in nums {}
+    0
+    // println!("Here is the array we are searching: {:?}", nums);
+    // println!("    This is the target{target}");
+    // // Write your code here
+    // if nums.is_empty() {
+    //     return -1;
+    // }
+    // let index = nums.len() / 2;
+    // println!("    This is the index={index}");
+    // let test_num = nums[index];
+    // println!("    This is the test_num={test_num}");
+    //
+    // if test_num == target {
+    //     return index as i32;
+    // }
+    //
+    // if test_num > target {
+    //     return binarySearch(&nums[0..index], target);
+    // }
+    //
+    // if test_num < target {
+    //     return binarySearch(&nums[index..nums.len()], target);
+    // }
+    //
+    // return -1;
 }
 
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn test_target_in_middle() {
+        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 3), 2);
+    }
+
+    #[test]
+    fn test_target_at_start() {
+        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 1), 0);
+    }
+
+    #[test]
+    fn test_target_at_end() {
+        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 5), 4);
+    }
+
+    #[test]
+    fn test_not_found() {
+        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 6), -1);
+    }
+
+    #[test]
+    fn test_empty_slice() {
+        assert_eq!(binarySearch(&[], 1), -1); // will panic - no base case
+    }
+}
