@@ -25,7 +25,14 @@ fn binarySearch(nums: &[i32], target: i32) -> i32 {
     let mut left = 0;
     let mut right = nums.len();
 
-    for candidate in nums {}
+    while left < right {
+        let mid = left + (right - left) / 2;
+        match nums[mid].cmp(&target) {
+            std::cmp::Ordering::Less => todo!(),
+            std::cmp::Ordering::Equal => todo!(),
+            std::cmp::Ordering::Greater => todo!(),
+        }
+    }
     0
     // println!("Here is the array we are searching: {:?}", nums);
     // println!("    This is the target{target}");
