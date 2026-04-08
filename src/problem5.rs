@@ -20,7 +20,7 @@ Return a single INTEGER: the 0-based index of target in nums if it exists; other
  *  1. INTEGER_ARRAY nums
  *  2. INTEGER target
  */
-
+#[allow(dead_code)]
 fn binarySearch(nums: &[i32], target: i32) -> i32 {
     let mut left = 0;
     let mut right = nums.len();
@@ -28,36 +28,12 @@ fn binarySearch(nums: &[i32], target: i32) -> i32 {
     while left < right {
         let mid = left + (right - left) / 2;
         match nums[mid].cmp(&target) {
-            std::cmp::Ordering::Less => todo!(),
-            std::cmp::Ordering::Equal => todo!(),
-            std::cmp::Ordering::Greater => todo!(),
+            std::cmp::Ordering::Equal => return mid as i32,
+            std::cmp::Ordering::Less => left = mid + 1,
+            std::cmp::Ordering::Greater => right = mid,
         }
     }
-    0
-    // println!("Here is the array we are searching: {:?}", nums);
-    // println!("    This is the target{target}");
-    // // Write your code here
-    // if nums.is_empty() {
-    //     return -1;
-    // }
-    // let index = nums.len() / 2;
-    // println!("    This is the index={index}");
-    // let test_num = nums[index];
-    // println!("    This is the test_num={test_num}");
-    //
-    // if test_num == target {
-    //     return index as i32;
-    // }
-    //
-    // if test_num > target {
-    //     return binarySearch(&nums[0..index], target);
-    // }
-    //
-    // if test_num < target {
-    //     return binarySearch(&nums[index..nums.len()], target);
-    // }
-    //
-    // return -1;
+    -1
 }
 
 #[cfg(test)]
