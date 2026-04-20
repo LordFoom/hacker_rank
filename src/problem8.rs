@@ -34,5 +34,5 @@ fn areBracketsProperlyMatched(code_snippet: &str) -> bool {
             // }
         }
     }
-    balanced
+    balanced && stack.is_empty()
 }
