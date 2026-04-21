@@ -21,6 +21,12 @@ Output
 
 fn findNextGreaterElementsWithDistance(readings: &[i32]) -> Vec<Vec<i32>> {
     let mut greater_than_pairs = Vec::new();
+    for i in 0..readings.len() - 1 {
+        let num_to_check = readings[i];
+        for j in (i + 1)..readings.len() {
+            let next_num = readings[j];
+        }
+    }
     //start with first number
     // Write your code here
     return greater_than_pairs;
