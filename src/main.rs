@@ -2,6 +2,7 @@ mod args;
 mod problem1;
 mod problem10;
 mod problem11;
+mod problem12;
 mod problem2;
 mod problem3;
 mod problem4;

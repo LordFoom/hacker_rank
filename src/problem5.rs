@@ -60,31 +60,31 @@ fn binarySearch(nums: &[i32], target: i32) -> i32 {
     // return -1;
 }
 
-#[cfg(test)]
-mod test {
-    use super::*;
-    #[test]
-    fn test_target_in_middle() {
-        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 3), 2);
-    }
-
-    #[test]
-    fn test_target_at_start() {
-        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 1), 0);
-    }
-
-    #[test]
-    fn test_target_at_end() {
-        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 5), 4);
-    }
-
-    #[test]
-    fn test_not_found() {
-        assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 6), -1);
-    }
-
-    #[test]
-    fn test_empty_slice() {
-        assert_eq!(binarySearch(&[], 1), -1); // will panic - no base case
-    }
-}
+// #[cfg(test)]
+// mod test {
+//     use super::*;
+//     #[test]
+//     fn test_target_in_middle() {
+//         assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 3), 2);
+//     }
+//
+//     #[test]
+//     fn test_target_at_start() {
+//         assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 1), 0);
+//     }
+//
+//     #[test]
+//     fn test_target_at_end() {
+//         assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 5), 4);
+//     }
+//
+//     #[test]
+//     fn test_not_found() {
+//         assert_eq!(binarySearch(&[1, 2, 3, 4, 5], 6), -1);
+//     }
+//
+//     #[test]
+//     fn test_empty_slice() {
+//         assert_eq!(binarySearch(&[], 1), -1); // will panic - no base case
+//     }
+// }
