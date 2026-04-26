@@ -17,9 +17,16 @@ Output:
  */
 fn debounceTimestamps(timestamps: &[i32], K: i32) -> i32 {
     let mut check_int = timestamps[0];
-    for i in 1..timestamps.len() {}
-    0
+    let mut ret_vec = Vec::new();
+    for i in 1..timestamps.len() {
+        let curr_number = timestamps[i];
+        let int_minus_check = curr_number - check_int;
 
+        if int_minus_check >= K {
+            check_int = curr_number;
+            ret_vec.push(curr_number);
+        }
+    }
+    ret_vec.len() as i32
     // Write your code here
 }
-
