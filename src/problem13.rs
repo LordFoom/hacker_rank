@@ -3,19 +3,15 @@
 
 */
 fn findTaskPairForSlot(taskDurations: &[i32], slotLength: i32) -> Vec<i32> {
-    if taskDurations.is_empty() {
-        return vec![-1, -1];
-    }
-    for i in 0..taskDurations.len() - 1 {
-        for j in i + 1..taskDurations.len() {
-            let num1 = taskDurations[i];
-            let num2 = taskDurations[j];
-            if num1 + num2 == slotLength {
-                return vec![i as i32, j as i32];
-            }
+    use std::collections::HashMap;
+    let mut seen: HashMap<i32, usize> = HashMap::new();
+    for (j, &num) in taskDurations.iter().enumerate() {
+        let complement = slotLength - num;
+        if let Some(&i) = seen.get(&complement) {
+            return vec![i as i32, j as i32];
         }
+        seen.insert(num, j);
     }
-
     vec![-1, -1]
 }
 
