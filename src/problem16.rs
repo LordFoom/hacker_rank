@@ -1,3 +1,5 @@
+use core::iter::IntoIterator;
+
 /*
  * Complete the 'countInstallationSequences' function below.
  *
@@ -48,4 +50,83 @@ Sample Output 1
  */
 fn countInstallationSequences(n: i32) -> String {
     // This is basically the fibonacci
+    if n == 0 || n == 1 {
+        return "1".to_string();
+    }
+    let mut prev = "1".to_string();
+    let mut prev_prev = "1".to_string();
+    // let mut prev = BigInt::from(1);
+    // let mut prev_prev = BigInt::from(1);
+    for i in 2..=n {
+        let tmp = prev.clone();
+        // println!("{i} iter, pre==============");
+        // println!("tmp={tmp}");
+        // println!("prev={prev}");
+        // println!("prev_prev={prev_prev}");
+        prev = add_string(&prev, &prev_prev);
+        prev_prev = tmp;
+        // prev = prev + prev_prev;
+        // prev_prev = tmp;
+        // println!("{i} iter, post==============");
+        // println!("tmp={tmp}");
+        // println!("prev={prev}");
+        // println!("prev_prev={prev_prev}");
+    }
+    // let ret_val = prev;
+    eprintln!("Returning {prev}");
+    prev.to_string()
+    // ret_val.to_string()
+}
+
+fn add_string(num1: &str, num2: &str) -> String {
+    let curr_idx = 0;
+    //is there a way we can zip this up?
+    // num1.chars().into_iter().zip
+    // or condemned to trying to iterate
+    let mut big_str = String::new();
+    let mut short_str = String::new();
+    if num1.len() >= num2.len() {
+        big_str = num1.to_string();
+        short_str = num2.to_string();
+    } else {
+        big_str = num2.to_string();
+        short_str = num1.to_string();
+    }
+    let carry_over_digit = {
+
+    }
+    for i in short_str.len() - 1..=0 {}
+    String::new()
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn prb_16_test_low_val() {
+        let n = 2;
+        let count = countInstallationSequences(n);
+        assert_eq!("2", count);
+        let n = 3;
+        let count = countInstallationSequences(n);
+        assert_eq!("3", count);
+        let n = 4;
+        let count = countInstallationSequences(n);
+        assert_eq!("5", count);
+    }
+
+    #[test]
+    fn prb_16_test_less_low_val() {
+        let n = 8;
+        let count = countInstallationSequences(n);
+        assert_eq!("34", count);
+    }
+
+    #[test]
+    fn prb_16_test_15() {
+        let n = 14;
+        let count = countInstallationSequences(n);
+        assert_eq!("610", count);
+    }
 }
