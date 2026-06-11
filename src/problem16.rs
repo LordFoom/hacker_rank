@@ -1,5 +1,4 @@
-use core::iter::IntoIterator;
-
+use std::collections::VecDeque;
 /*
  * Complete the 'countInstallationSequences' function below.
  *
@@ -83,20 +82,31 @@ fn add_string(num1: &str, num2: &str) -> String {
     //is there a way we can zip this up?
     // num1.chars().into_iter().zip
     // or condemned to trying to iterate
-    let mut big_str = String::new();
-    let mut short_str = String::new();
+    let mut big_str = Vec::new();
+    let mut short_str = Vec::new();
+    let mut result_str = VecDeque::new();
+    // make each one the reverse and turn it into a collection of numbers
     if num1.len() >= num2.len() {
-        big_str = num1.to_string();
-        short_str = num2.to_string();
+        big_str = num1.chars().rev().collect();
+        short_str = num2.chars().rev().collect();
     } else {
-        big_str = num2.to_string();
-        short_str = num1.to_string();
+        big_str = num2.chars().rev().collect();
+        short_str = num1.chars().rev().collect();
     }
-    let carry_over_digit = {
+    let mut carry_over_digit = 0;
+    for (index, num_char_1) in short_str.iter().enumerate() {
+        let num_1 = *num_char_1 as u8;
+        let num_2 = big_str[index] as u8;
+        let num_3 = num_1 + num_2 + carry_over_digit;
+        carry_over_digit = num_3 % 10;
+        let final_num = num_3 - carry_over_digit;
+        result_str.push_front(final_num);
+    }
 
+    if carry_over_digit != 0 {
+        result_str.push_front(carry_over_digit);
     }
-    for i in short_str.len() - 1..=0 {}
-    String::new()
+    result_str.into_iter().map(|num| format!("{num}")).collect()
 }
 
 #[cfg(test)]
@@ -129,4 +139,9 @@ mod test {
         let count = countInstallationSequences(n);
         assert_eq!("610", count);
     }
+
+    #[test]
+    fn prb_16_test_add_string_low() {}
+    #[test]
+    fn prb_16_test_add_string_medium() {}
 }
