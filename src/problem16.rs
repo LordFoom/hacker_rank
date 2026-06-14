@@ -73,7 +73,7 @@ fn countInstallationSequences(n: i32) -> String {
     }
     // let ret_val = prev;
     eprintln!("Returning {prev}");
-    prev.to_string()
+    prev
     // ret_val.to_string()
 }
 
@@ -94,12 +94,26 @@ fn add_string(num1: &str, num2: &str) -> String {
         short_str = num1.chars().rev().collect();
     }
     let mut carry_over_digit = 0;
-    for (index, num_char_1) in short_str.iter().enumerate() {
-        let num_1 = *num_char_1 as u8;
-        let num_2 = big_str[index] as u8;
+    for (index, num_char_1) in big_str.iter().enumerate() {
+        let num_1 = num_char_1.to_digit(10).unwrap();
+        // let num_2 = num_char_2.to_digit();
+
+        let num_2 = if let Some(num) = short_str.get(index) {
+            num.to_digit(10).unwrap()
+        } else {
+            0
+        };
+        println!("Adding {num_1} to {num_2}");
         let num_3 = num_1 + num_2 + carry_over_digit;
-        carry_over_digit = num_3 % 10;
-        let final_num = num_3 - carry_over_digit;
+        let final_num = if num_3 <= 9 {
+            carry_over_digit = 0;
+            num_3
+        } else {
+            carry_over_digit = 1;
+            num_3 - 10
+        };
+        println!("carry_over_digit = {carry_over_digit}");
+        println!("final_num = {final_num}");
         result_str.push_front(final_num);
     }
 
@@ -141,7 +155,12 @@ mod test {
     }
 
     #[test]
-    fn prb_16_test_add_string_low() {}
+    fn prb_16_test_add_string_low() {
+        let a_str = "994";
+        let b_str = "7";
+        let ab_str = add_string(a_str, b_str);
+        assert_eq!("1001", ab_str);
+    }
     #[test]
     fn prb_16_test_add_string_medium() {}
 }
