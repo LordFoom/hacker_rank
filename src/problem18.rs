@@ -28,10 +28,10 @@ struct SinglyLinkedListNode {
 }
 
 fn removeKthNodeFromEnd(head: *const SinglyLinkedListNode, k: i32) -> *const SinglyLinkedListNode {
-    let mut i = 0;
-    let mut j = 0;
+    let mut j = 1;
     let mut curr_node = head as *mut SinglyLinkedListNode;
     let mut trailing_node = head as *mut SinglyLinkedListNode;
+    let mut removed = false;
     while !curr_node.is_null() {
         if j <= k {
             j += 1;
@@ -44,18 +44,16 @@ fn removeKthNodeFromEnd(head: *const SinglyLinkedListNode, k: i32) -> *const Sin
                     let next_node = (*trailing_node).next;
                     (*trailing_node).next = (*next_node).next;
                 }
+                removed = true;
                 break;
             }
             trailing_node = unsafe { (*trailing_node).next }
         }
     }
-    if j > k {
+    if removed {
         return head;
     }
-    if j == k {
-        return unsafe { (*head).next };
-    }
-    trailing_node
+    unsafe { (*head).next }
 }
 
 // Helper: Build a linked list from a vec
@@ -113,6 +111,7 @@ mod tests {
     fn test_remove_last_node() {
         let head = build_list(&[1, 2, 3]);
         let result = removeKthNodeFromEnd(head as *const _, 1);
+        println!("what did come back? {:?}", result);
         assert_eq!(list_to_vec(result), vec![1, 2]);
         free_list(result as *mut _);
     }
@@ -121,6 +120,7 @@ mod tests {
     fn test_remove_head() {
         let head = build_list(&[1, 2, 3]);
         let result = removeKthNodeFromEnd(head as *const _, 3);
+        println!("what did come back? {:?}", list_to_vec(result));
         assert_eq!(list_to_vec(result), vec![2, 3]);
         free_list(result as *mut _);
     }
