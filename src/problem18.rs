@@ -28,12 +28,15 @@ struct SinglyLinkedListNode {
 }
 
 fn removeKthNodeFromEnd(head: *const SinglyLinkedListNode, k: i32) -> *const SinglyLinkedListNode {
+    // if k < 0 {
+    //     return head;
+    // }
     let mut j = 1;
     let mut curr_node = head as *mut SinglyLinkedListNode;
     let mut trailing_node = head as *mut SinglyLinkedListNode;
     let mut removed = false;
     while !curr_node.is_null() {
-        if j <= k {
+        if j <= k + 1 {
             j += 1;
             curr_node = unsafe { (*curr_node).next }
         } else {
@@ -51,9 +54,13 @@ fn removeKthNodeFromEnd(head: *const SinglyLinkedListNode, k: i32) -> *const Sin
         }
     }
     if removed {
+        // println!("Removed a node, returning head");
         return head;
     }
-    unsafe { (*head).next }
+    if j == k + 2 {
+        return unsafe { (*head).next };
+    }
+    head
 }
 
 // Helper: Build a linked list from a vec
@@ -108,52 +115,101 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_remove_last_node() {
-        let head = build_list(&[1, 2, 3]);
+    fn test_single_node_invalid_k() {
+        // [5], k=1 -> 2nd-from-end doesn't exist -> unchanged [5]
+        let head = build_list(&[5]);
         let result = removeKthNodeFromEnd(head as *const _, 1);
-        println!("what did come back? {:?}", result);
-        assert_eq!(list_to_vec(result), vec![1, 2]);
+        assert_eq!(list_to_vec(result), vec![5]);
         free_list(result as *mut _);
     }
 
     #[test]
-    fn test_remove_head() {
-        let head = build_list(&[1, 2, 3]);
-        let result = removeKthNodeFromEnd(head as *const _, 3);
-        println!("what did come back? {:?}", list_to_vec(result));
-        assert_eq!(list_to_vec(result), vec![2, 3]);
-        free_list(result as *mut _);
-    }
-
-    #[test]
-    fn test_remove_middle() {
-        let head = build_list(&[1, 2, 3, 4, 5]);
-        let result = removeKthNodeFromEnd(head as *const _, 2);
-        assert_eq!(list_to_vec(result), vec![1, 2, 3, 5]);
-        free_list(result as *mut _);
-    }
-
-    #[test]
-    fn test_single_node() {
-        let head = build_list(&[1]);
-        let result = removeKthNodeFromEnd(head as *const _, 1);
+    fn test_single_node_remove_last() {
+        // [5], k=0 -> remove last -> []
+        let head = build_list(&[5]);
+        let result = removeKthNodeFromEnd(head as *const _, 0);
         assert_eq!(list_to_vec(result), vec![]);
         free_list(result as *mut _);
     }
 
     #[test]
-    fn test_two_nodes_remove_second() {
+    fn test_two_nodes_remove_last() {
+        // [1,2], k=0 -> [1]
         let head = build_list(&[1, 2]);
-        let result = removeKthNodeFromEnd(head as *const _, 1);
+        let result = removeKthNodeFromEnd(head as *const _, 0);
         assert_eq!(list_to_vec(result), vec![1]);
         free_list(result as *mut _);
     }
 
     #[test]
-    fn test_two_nodes_remove_first() {
+    fn test_two_nodes_remove_head() {
+        // [1,2], k=1 -> remove 2nd-from-end (the head) -> [2]
         let head = build_list(&[1, 2]);
-        let result = removeKthNodeFromEnd(head as *const _, 2);
+        let result = removeKthNodeFromEnd(head as *const _, 1);
         assert_eq!(list_to_vec(result), vec![2]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_remove_middle() {
+        // [1,2,3,4,5], k=1 -> [1,2,3,5]
+        let head = build_list(&[1, 2, 3, 4, 5]);
+        let result = removeKthNodeFromEnd(head as *const _, 1);
+        assert_eq!(list_to_vec(result), vec![1, 2, 3, 5]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_remove_middle_different() {
+        // [1,2,3,4,5], k=2 -> [1,2,4,5]
+        let head = build_list(&[1, 2, 3, 4, 5]);
+        let result = removeKthNodeFromEnd(head as *const _, 2);
+        assert_eq!(list_to_vec(result), vec![1, 2, 4, 5]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_official_example() {
+        // [5,6,7,8], k=3 -> remove head -> [6,7,8]
+        let head = build_list(&[5, 6, 7, 8]);
+        let result = removeKthNodeFromEnd(head as *const _, 3);
+        assert_eq!(list_to_vec(result), vec![6, 7, 8]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_remove_last_of_three() {
+        // [1,2,3], k=0 -> [1,2]
+        let head = build_list(&[1, 2, 3]);
+        let result = removeKthNodeFromEnd(head as *const _, 0);
+        assert_eq!(list_to_vec(result), vec![1, 2]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_invalid_k_negative() {
+        // k < 0 -> unchanged
+        let head = build_list(&[1, 2, 3]);
+        let result = removeKthNodeFromEnd(head as *const _, -1);
+        assert_eq!(list_to_vec(result), vec![1, 2, 3]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_out_of_bounds_k() {
+        // [1,2,3], k=5 -> unchanged
+        let head = build_list(&[1, 2, 3]);
+        let result = removeKthNodeFromEnd(head as *const _, 5);
+        assert_eq!(list_to_vec(result), vec![1, 2, 3]);
+        free_list(result as *mut _);
+    }
+
+    #[test]
+    fn test_k_equals_length_out_of_bounds() {
+        // [1,2,3], k=3 -> out of bounds (max valid k is 2) -> unchanged
+        let head = build_list(&[1, 2, 3]);
+        let result = removeKthNodeFromEnd(head as *const _, 3);
+        assert_eq!(list_to_vec(result), vec![1, 2, 3]);
         free_list(result as *mut _);
     }
 }
