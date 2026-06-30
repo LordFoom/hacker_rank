@@ -101,19 +101,17 @@ fn canPlaceSecurityCameras(N: i32, grid: &[Vec<i32>]) -> bool {
     // Write your code here
 }
 
-fn is_clear_horizontal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
-    for i in 0..grid.len() {
+fn is_clear_horizontal(x: usize, y: usize, row: Vec<i32>) -> bool {
+    for i in 0..row.len() {
         //do not check self
         if i == x {
             continue;
         }
+        if row[i] == -1 {
+            return false;
+        }
     }
-    // for col in grid[x].clone() {
-    //     //do not check to the left of beginning
-    //     //do not check to the right of end
-    // }
-
-    false
+    true
 }
 
 fn is_clear_vertical(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
