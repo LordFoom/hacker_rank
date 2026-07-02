@@ -101,7 +101,7 @@ fn canPlaceSecurityCameras(N: i32, grid: &[Vec<i32>]) -> bool {
     // Write your code here
 }
 
-fn is_clear_horizontal(x: usize, y: usize, row: Vec<i32>) -> bool {
+fn is_clear_horizontal(x: usize, row: Vec<i32>) -> bool {
     for i in 0..row.len() {
         //do not check self
         if i == x {
@@ -115,7 +115,19 @@ fn is_clear_horizontal(x: usize, y: usize, row: Vec<i32>) -> bool {
 }
 
 fn is_clear_vertical(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
-    false
+    //iterate over every row
+    for i in 0..grid.len() {
+        //if it is the row of the security camera, skip
+        if x == i {
+            continue;
+        }
+        //check the column
+        let curr_row = &grid[i];
+        if curr_row[y] == -1 {
+            return false;
+        }
+    }
+    true
 }
 
 fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
