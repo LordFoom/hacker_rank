@@ -131,5 +131,15 @@ fn is_clear_vertical(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
 }
 
 fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
+    //we start with x,y
+    //we need to check: 
+    //( x+1, y+1 ), (x+2, y+2) up to and excluding x>num_cols
+    //, (x-1,y+1), (x-2,y+1) up to and excluding y>num_rows
+    //symmetrically ( x+1, y-1 ), etc. and (x-1, y-1) etc
+    //iterate over every row
+    for i in 0..grid.len() {
+        //iterate over every column
+        for j 
+    }
     false
 }
