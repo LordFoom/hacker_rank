@@ -1,3 +1,4 @@
+use core::iter::Iterator;
 use std::io::{self, BufRead};
 
 /*
@@ -132,14 +133,19 @@ fn is_clear_vertical(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
 
 fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
     //we start with x,y
-    //we need to check: 
+    //we need to check:
     //( x+1, y+1 ), (x+2, y+2) up to and excluding x>num_cols
+    for i in (x..grid.len()) {}
     //, (x-1,y+1), (x-2,y+1) up to and excluding y>num_rows
-    //symmetrically ( x+1, y-1 ), etc. and (x-1, y-1) etc
+    for i in (0..x).rev() {}
+    //( x+1, y-1 ), (x+2, y-2) down to 0 and x<grid[i].len()
+    for i in (x..grid.len()) {}
+    //symmetrically ( x-1, y-1 ),(x-2, y-1) etc
+    for i in (0..x).rev() {}
     //iterate over every row
-    for i in 0..grid.len() {
-        //iterate over every column
-        for j 
-    }
+    // for i in 0..grid.len() {
+    //     //iterate over every column
+    //     for j in grid[i].len() {}
+    // }
     false
 }
