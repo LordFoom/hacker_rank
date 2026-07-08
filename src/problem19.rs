@@ -136,6 +136,9 @@ fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
     //we need to check:
     //( x+1, y+1 ), (x+2, y+2) up to and excluding x>num_cols
     for i in (x..grid[0].len()) {
+        if i == x {
+            continue;
+        }
         let row = &grid[i];
         for j in y..grid.len() {
             if row[j] == -1 {
@@ -146,7 +149,7 @@ fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
     //, (x-1,y+1), (x-2,y+1) up to and excluding y>num_rows
     for i in (0..x).rev() {
         //do not check the row we are on
-        if y == x {
+        if i == x {
             continue;
         }
         let row = &grid[i];
@@ -157,7 +160,11 @@ fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
         }
     }
     //( x+1, y-1 ), (x+2, y-2) down to 0 and x<grid[i].len()
-    for i in (x..grid.len()) {}
+    for i in (x..grid[0].len()) {
+       if i==x{
+           continue;
+       } 
+    }
     //symmetrically ( x-1, y-1 ),(x-2, y-1) etc
     for i in (0..x).rev() {}
     //iterate over every row
