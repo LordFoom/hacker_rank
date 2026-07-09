@@ -161,7 +161,6 @@ fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
     }
     //( x+1, y-1 ), (x+2, y-2) down to 0 and x<grid[i].len()
     for i in (x..grid[0].len()) {
-       if i==x{
            continue;
        } 
     }
