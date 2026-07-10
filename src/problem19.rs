@@ -100,6 +100,12 @@ Sample Output 1
 
 fn canPlaceSecurityCameras(N: i32, grid: &[Vec<i32>]) -> bool {
     // Write your code here
+    //for every column, start with 0, update its own position in the grid to -1,
+    //check horizonal/diagonal/vertical, and fail if one found, which will advance the _OUTER_ loop
+    //by one
+    for i in 0..N {
+        //
+    }
 }
 
 fn is_clear_horizontal(x: usize, row: Vec<i32>) -> bool {
