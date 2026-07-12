@@ -1,188 +1,152 @@
-use core::iter::Iterator;
-use std::io::{self, BufRead};
-
-/*
- * Place N Cameras Without Conflict on Blocked Grid
-
-Given an NxN grid where 0 is empty and 1 is blocked, return true if N cameras can be placed on empty cells such that no two share the same row, column, or diagonal.
-Examples
-Example 1
-
-Input:
-N = 4
-grid = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-
-Output:
-True
-
-Explanation:
-    We need to place 4 cameras so that no two share a row, column, or diagonal. One valid arrangement is:
-        Row 0 → column 1
-        Row 1 → column 3
-        Row 2 → column 0
-        Row 3 → column 2
-    Each row has exactly one camera, no two are in the same column, and no two lie on the same diagonal. Thus the function returns true.
-
-Example 2
-Input:
-N = 4
-grid = [[0, 1, 0, 0], [0, 0, 0, 1], [1, 0, 0, 0], [0, 0, 1, 0]]
-
-Output:
-True
-
-Explanation:
-    Some cells are blocked by skylights (marked 1).
-    We still need 4 cameras. One possible placement:
-        Row 0 → column 2 (cell [0][2] is empty)
-        Row 1 → column 0 (cell [1][0] is empty, no conflict with row 0)
-        Row 2 → column 3 (cell [2][3] is empty, no conflicts)
-        Row 3 → column 1 (cell [3][1] is empty, no conflicts)
-    All cameras are on empty cells, and none share a row, column, or diagonal.
-    The function returns true.
-
-Input Format
-
-    The first line contains a single integer, N.
-    The second line contains a single integer, grid_rows, representing the number of rows in the grid.
-    The third line contains a single integer, grid_columns, representing the number of columns in the grid.
-    The next grid_rows lines describe the grid. Each of these lines contains grid_columns space-separated integers.
-
-5
-3
-4
-1 0 0 1
-0 1 1 0
-1 0 1 0
-
-Explanation:
-
-    N = 5
-    grid_rows = 3
-    grid_columns = 4
-    grid = [[1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 1, 0]]
-
-Constraints
-
-    1 <= N <= 15
-    grid.length == N
-    For all 0 <= i < N, grid[i].length == N
-    For all 0 <= i, j < N, grid[i][j] ∈ {0, 1}
-
-Output Format
-
-Return a single boolean value (true or false) indicating whether a valid arrangement of N cameras exists under the given constraints.
-
-Sample Input 0
-
-1
-1
-1
-0
-
-Sample Output 0
-
-1
-
-Sample Input 1
-
-2
-2
-2
-0 1
-1 0
-
-Sample Output 1
-
-0
-
- */
-
 fn canPlaceSecurityCameras(N: i32, grid: &[Vec<i32>]) -> bool {
-    // Write your code here
-    //for every column, start with 0, update its own position in the grid to -1,
-    //check horizonal/diagonal/vertical, and fail if one found, which will advance the _OUTER_ loop
-    //by one
-    for i in 0..N {
-        //
+    let n = N as usize;
+
+    // N non-attacking cameras need N distinct rows and N distinct cols.
+    if grid.len() < n || grid.iter().any(|row| row.len() < n) {
+        return false;
     }
+
+    let mut cols = vec![false; n];
+    let mut diag_up = vec![false; 2 * n]; // index r + c
+    let mut diag_down = vec![false; 2 * n]; // index r + (n-1) - c
+
+    solve(0, n, grid, &mut cols, &mut diag_up, &mut diag_down)
 }
 
-fn is_clear_horizontal(x: usize, row: Vec<i32>) -> bool {
-    for i in 0..row.len() {
-        //do not check self
-        if i == x {
-            continue;
-        }
-        if row[i] == -1 {
-            return false;
-        }
+fn solve(
+    r: usize,
+    n: usize,
+    grid: &[Vec<i32>],
+    cols: &mut [bool],
+    diag_up: &mut [bool],
+    diag_down: &mut [bool],
+) -> bool {
+    if r == n {
+        return true; // placed one in every row → all n cameras down
     }
-    true
+
+    for c in 0..n {
+        if grid[r][c] == 1 {
+            continue; // blocked cell
+        }
+        let up = r + c;
+        let down = r + (n - 1) - c;
+        if cols[c] || diag_up[up] || diag_down[down] {
+            continue; // conflict on column or a diagonal
+        }
+
+        // place
+        cols[c] = true;
+        diag_up[up] = true;
+        diag_down[down] = true;
+
+        if solve(r + 1, n, grid, cols, diag_up, diag_down) {
+            return true;
+        }
+
+        // undo (backtrack)
+        cols[c] = false;
+        diag_up[up] = false;
+        diag_down[down] = false;
+    }
+
+    false // no column worked in this row
 }
 
-fn is_clear_vertical(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
-    //iterate over every row
-    for i in 0..grid.len() {
-        //if it is the row of the security camera, skip
-        if x == i {
-            continue;
-        }
-        //check the column
-        let curr_row = &grid[i];
-        if curr_row[y] == -1 {
-            return false;
-        }
-    }
-    true
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-fn is_clear_diagonal(x: usize, y: usize, grid: &[Vec<i32>]) -> bool {
-    //we start with x,y
-    //we need to check:
-    //( x+1, y+1 ), (x+2, y+2) up to and excluding x>num_cols
-    for i in (x..grid[0].len()) {
-        if i == x {
-            continue;
-        }
-        let row = &grid[i];
-        for j in y..grid.len() {
-            if row[j] == -1 {
-                return false;
-            }
-        }
+    #[test]
+    fn empty_4x4_solvable() {
+        let grid = vec![
+            vec![0, 0, 0, 0],
+            vec![0, 0, 0, 0],
+            vec![0, 0, 0, 0],
+            vec![0, 0, 0, 0],
+        ];
+        assert!(canPlaceSecurityCameras(4, &grid));
     }
-    //, (x-1,y+1), (x-2,y+1) up to and excluding y>num_rows
-    for i in (0..x).rev() {
-        //do not check the row we are on
-        if i == x {
-            continue;
-        }
-        let row = &grid[i];
-        for j in y..grid.len() {
-            if row[j] == -1 {
-                return false;
-            }
-        }
+
+    #[test]
+    fn blocked_4x4_still_solvable() {
+        // Example 2 from the prompt
+        let grid = vec![
+            vec![0, 1, 0, 0],
+            vec![0, 0, 0, 1],
+            vec![1, 0, 0, 0],
+            vec![0, 0, 1, 0],
+        ];
+        assert!(canPlaceSecurityCameras(4, &grid));
     }
-    //( x+1, y-1 ), (x+2, y-2) down to 0 and x<grid[i].len()
-    for i in (x..grid[0].len()) {
-        if i == x {
-            continue;
-        }
-        let row = &grid[i];
-        for j in (0..y).rev() {
-            if row[j] == -1 {
-                return false;
-            }
-        }
+
+    #[test]
+    fn single_cell_empty() {
+        // Sample Input 0
+        let grid = vec![vec![0]];
+        assert!(canPlaceSecurityCameras(1, &grid));
     }
-    //symmetrically ( x-1, y-1 ),(x-2, y-1) etc
-    for i in (0..x).rev() {}
-    //iterate over every row
-    // for i in 0..grid.len() {
-    //     //iterate over every column
-    //     for j in grid[i].len() {}
-    // }
-    false
+
+    #[test]
+    fn single_cell_blocked() {
+        let grid = vec![vec![1]];
+        assert!(!canPlaceSecurityCameras(1, &grid));
+    }
+
+    #[test]
+    fn n2_impossible() {
+        // Sample Input 1 — two queens on 2x2 always attack diagonally
+        let grid = vec![vec![0, 0], vec![0, 0]];
+        assert!(!canPlaceSecurityCameras(2, &grid));
+    }
+
+    #[test]
+    fn n3_impossible() {
+        // Classic: no solution to 3-queens even on an empty board
+        let grid = vec![vec![0, 0, 0], vec![0, 0, 0], vec![0, 0, 0]];
+        assert!(!canPlaceSecurityCameras(3, &grid));
+    }
+
+    #[test]
+    fn grid_too_small_for_n() {
+        // N=5 but grid is 3x4 — fewer rows/cols than cameras needed
+        let grid = vec![
+            vec![1, 0, 0, 1],
+            vec![0, 1, 1, 0],
+            vec![1, 0, 1, 0],
+        ];
+        assert!(!canPlaceSecurityCameras(5, &grid));
+    }
+
+    #[test]
+    fn blocking_forces_no_solution() {
+        // Block the whole first row → row 0 can't place → false
+        let grid = vec![
+            vec![1, 1, 1, 1],
+            vec![0, 0, 0, 0],
+            vec![0, 0, 0, 0],
+            vec![0, 0, 0, 0],
+        ];
+        assert!(!canPlaceSecurityCameras(4, &grid));
+    }
+
+    #[test]
+    fn n8_empty_solvable() {
+        // 8-queens has solutions
+        let grid = vec![vec![0; 8]; 8];
+        assert!(canPlaceSecurityCameras(8, &grid));
+    }
+
+    #[test]
+    fn forced_single_path() {
+        // Only one legal column per row; verify it's found
+        // Row0→c1, Row1→c3, Row2→c0, Row3→c2 (the arrangement from Example 1)
+        let grid = vec![
+            vec![1, 0, 1, 1],
+            vec![1, 1, 1, 0],
+            vec![0, 1, 1, 1],
+            vec![1, 1, 0, 1],
+        ];
+        assert!(canPlaceSecurityCameras(4, &grid));
+    }
 }
