@@ -48,5 +48,20 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
     if responseTimes.is_empty() {
         return 0;
     }
-    for i in 1..responseTimes.len() {}
+    if responseTimes.len() == 1 {
+        return 0;
+    }
+    //let mut running_sum = responseTimes[0];
+    let mut running_sum = 0;
+    let mut count = 0;
+    let mut result_count = 0;
+    for i in 1..responseTimes.len() {
+        count = count + 1;
+        running_sum = running_sum + responseTimes[i - 1];
+        let avg = running_sum / count;
+        if responseTimes[i] > avg {
+            result_count += 1;
+        }
+    }
+    result_count
 }
