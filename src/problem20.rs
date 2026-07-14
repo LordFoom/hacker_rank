@@ -45,10 +45,7 @@
 //    A single integer depicting the count of days.
 //
 fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
-    if responseTimes.is_empty() {
-        return 0;
-    }
-    if responseTimes.len() == 1 {
+    if responseTimes.len() <= 1 {
         return 0;
     }
     //let mut running_sum = responseTimes[0];
@@ -57,11 +54,53 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
     let mut result_count = 0;
     for i in 1..responseTimes.len() {
         count = count + 1;
-        running_sum = running_sum + responseTimes[i - 1];
+        running_sum = running_sum + responseTimes[i - 1] as u64;
         let avg = running_sum / count;
-        if responseTimes[i] > avg {
+        if responseTimes[i] as i64 > avg {
             result_count += 1;
         }
     }
     result_count
 }
+
+#cfg[test]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_empty() {
+        assert_eq!(count_response_time_regressions(&[]), 0);
+    }
+
+    #[test]
+    fn test_single() {
+        assert_eq!(count_response_time_regressions(&[10]), 0);
+    }
+
+    #[test]
+    fn test_example() {
+        // averages:
+        // 20 -> 30 > 20 ✓
+        // 20,30 -> avg 25 -> 25 > 25 ✗
+        // 20,30,25 -> avg 25 -> 40 > 25 ✓
+        assert_eq!(count_response_time_regressions(&[20, 30, 25, 40]), 2);
+    }
+
+    #[test]
+    fn test_no_regressions() {
+        assert_eq!(count_response_time_regressions(&[100, 90, 80, 70]), 0);
+    }
+
+    #[test]
+    fn test_all_regressions() {
+        assert_eq!(count_response_time_regressions(&[1, 2, 3, 4, 5]), 4);
+    }
+
+    #[test]
+    fn test_equal_to_average() {
+        // 2 > 2? no
+        // 2 > 2? no
+        assert_eq!(count_response_time_regressions(&[2, 2, 2]), 0);
+    }
+}
+
