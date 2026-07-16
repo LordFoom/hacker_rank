@@ -56,7 +56,7 @@ fn countInstallationSequences(n: i32) -> String {
     let mut prev_prev = "1".to_string();
     // let mut prev = BigInt::from(1);
     // let mut prev_prev = BigInt::from(1);
-    for i in 2..=n {
+    for _i in 2..=n {
         let tmp = prev.clone();
         // println!("{i} iter, pre==============");
         // println!("tmp={tmp}");
@@ -77,8 +77,8 @@ fn countInstallationSequences(n: i32) -> String {
     // ret_val.to_string()
 }
 
+#[allow(unused_assignments)]
 fn add_string(num1: &str, num2: &str) -> String {
-    let curr_idx = 0;
     //is there a way we can zip this up?
     // num1.chars().into_iter().zip
     // or condemned to trying to iterate

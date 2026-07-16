@@ -1,5 +1,3 @@
-use std::io::{self, BufRead};
-
 /*
  * Complete the 'isAlphabeticPalindrome' function below.
  *

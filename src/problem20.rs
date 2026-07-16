@@ -54,7 +54,7 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
     let mut result_count = 0;
     for i in 1..responseTimes.len() {
         count = count + 1;
-        running_sum = running_sum + responseTimes[i - 1] as u64;
+        running_sum = running_sum + responseTimes[i - 1] as i64;
         let avg = running_sum / count;
         if responseTimes[i] as i64 > avg {
             result_count += 1;
@@ -63,7 +63,7 @@ fn countResponseTimeRegressions(responseTimes: &[i32]) -> i32 {
     result_count
 }
 
-#cfg[test]
+#[cfg(test)]
 mod test {
     use super::*;
 

@@ -1,5 +1,4 @@
 use core::iter::Iterator;
-use std::io::{self, BufRead};
 
 /*
  * Complete the 'isAnagram' function below.

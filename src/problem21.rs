@@ -23,7 +23,6 @@ Input Format
     The last line contains the value of n.
     */
 fn countIsolatedCommunicationGroups(links: &[Vec<i32>], n: i32) -> i32 {
-    // Write your code here
     for i in 0..n {
 
     }

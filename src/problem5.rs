@@ -21,43 +21,45 @@ Return a single INTEGER: the 0-based index of target in nums if it exists; other
  *  2. INTEGER target
  */
 
+#[allow(unused_variables)]
 fn binarySearch(nums: &[i32], target: i32) -> i32 {
-    let mut left = 0;
-    let mut right = nums.len();
-
-    while left < right {
-        let mid = left + (right - left) / 2;
-        match nums[mid].cmp(&target) {
-            std::cmp::Ordering::Less => todo!(),
-            std::cmp::Ordering::Equal => todo!(),
-            std::cmp::Ordering::Greater => todo!(),
-        }
-    }
     0
-    // println!("Here is the array we are searching: {:?}", nums);
-    // println!("    This is the target{target}");
-    // // Write your code here
-    // if nums.is_empty() {
-    //     return -1;
-    // }
-    // let index = nums.len() / 2;
-    // println!("    This is the index={index}");
-    // let test_num = nums[index];
-    // println!("    This is the test_num={test_num}");
+    // let mut left = 0;
+    // let mut right = nums.len();
     //
-    // if test_num == target {
-    //     return index as i32;
+    // while left < right {
+    //     let mid = left + (right - left) / 2;
+    //     match nums[mid].cmp(&target) {
+    //         std::cmp::Ordering::Less => todo!(),
+    //         std::cmp::Ordering::Equal => todo!(),
+    //         std::cmp::Ordering::Greater => todo!(),
+    //     }
     // }
-    //
-    // if test_num > target {
-    //     return binarySearch(&nums[0..index], target);
-    // }
-    //
-    // if test_num < target {
-    //     return binarySearch(&nums[index..nums.len()], target);
-    // }
-    //
-    // return -1;
+    // 0
+    // // println!("Here is the array we are searching: {:?}", nums);
+    // // println!("    This is the target{target}");
+    // // // Write your code here
+    // // if nums.is_empty() {
+    // //     return -1;
+    // // }
+    // // let index = nums.len() / 2;
+    // // println!("    This is the index={index}");
+    // // let test_num = nums[index];
+    // // println!("    This is the test_num={test_num}");
+    // //
+    // // if test_num == target {
+    // //     return index as i32;
+    // // }
+    // //
+    // // if test_num > target {
+    // //     return binarySearch(&nums[0..index], target);
+    // // }
+    // //
+    // // if test_num < target {
+    // //     return binarySearch(&nums[index..nums.len()], target);
+    // // }
+    // //
+    // // return -1;
 }
 
 // #[cfg(test)]

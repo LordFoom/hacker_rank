@@ -1,5 +1,4 @@
 use std::{
-    io::{self, BufRead},
     ops::Div,
 }; /*
  * Complete the 'countResponseTimeRegressions' function below.
