@@ -42,15 +42,15 @@ fn countIsolatedCommunicationGroups(links: &[Vec<i32>], n: i32) -> i32 {
             continue;
         }
         component_count += 1;
-        let mut stack = graph[computer as usize];
+        let mut stack = vec![computer];
         while let Some(current) = stack.pop() {
             if visited[current as usize] {
                 continue;
             }
-            visited[current] = true;
+            visited[current as usize] = true;
             for &neighbor in &graph[current as usize] {
                 if !visited[neighbor]{
-                    stack.push(neighbor);
+                    stack.push(neighbor as i32);
                 }
             }
         }
