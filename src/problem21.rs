@@ -26,7 +26,7 @@ Input Format
     */
 fn countIsolatedCommunicationGroups(links: &[Vec<i32>], n: i32) -> i32 {
     //build an ajacency list
-    let mut graph = vec![Vec::new()];
+    let mut graph = vec![Vec::new(); n as usize];
 
     for link in links {
         let a = link[0] as usize;
@@ -37,20 +37,21 @@ fn countIsolatedCommunicationGroups(links: &[Vec<i32>], n: i32) -> i32 {
 
     let mut visited = vec![false; n as usize];
     let mut component_count = 0;
-    for computer in 0..n {
-        if visited[computer as usize] {
+    for computer in 0..n as usize {
+        if visited[computer] {
             continue;
         }
         component_count += 1;
         let mut stack = vec![computer];
+
         while let Some(current) = stack.pop() {
             if visited[current as usize] {
                 continue;
             }
-            visited[current as usize] = true;
-            for &neighbor in &graph[current as usize] {
+            visited[current] = true;
+            for &neighbor in &graph[current] {
                 if !visited[neighbor]{
-                    stack.push(neighbor as i32);
+                    stack.push(neighbor);
                 }
             }
         }
