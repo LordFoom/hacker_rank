@@ -2,8 +2,8 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
 
     let mut adjacency_list = vec![Vec::new(); n as usize];
     for dependency in dependencies {
-        let a = dependency[0];
-        let b = dependency[1];
+        let a = dependency[0] as usize;
+        let b = dependency[1] as usize;
 
         adjacency_list[a].push(b);
     }
@@ -15,6 +15,11 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
 
         }
     }
+
+    println!("Adjacency list of edges");
+    for edge in adjacency_list{
+        println!("{} ---> {}", edge[0], edge[1]);
+    }
     
 
     false
@@ -23,5 +28,13 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
 
 fn has_cycle(node: usize, adjacency_list: &[Vec<usize>], state: &mut [u8] ){
     state[node]=1;
+#[cfg(test)]
+mod test{
+    use super::*;
+    #[test]
+    fn test_just_print_stuff() {
+        let v =vec![[1, 0], [2, 1], [3, 2]];
+        hasCircularDependency(4,v);
+    }
 }
 
