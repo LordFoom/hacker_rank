@@ -29,8 +29,16 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
 fn has_cycle(node: usize, adjacency_list: &[Vec<usize>], state: &mut [u8] ){
     state[node]=1;
     for i in 0..adjacency_list[node].len() {
-
+        let next = adjecency_list[node][i];
+        if state[next]==1 {
+            return true;
+        }
+        if state[next]==0 && has_cycle(next, adjecency_list, state) {
+            return true;
+        }
     }
+    state[node]=2;
+    false
 }
 
 #[cfg(test)]
