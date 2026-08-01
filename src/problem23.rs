@@ -11,8 +11,8 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
     let mut state = vec![0; n as usize];
 
     for node in 0..n as usize {
-        if state[node]==0 && has_cycle(node, &adjecency_list,&mut state){
-
+        if state[node]==0 && has_cycle(node, &adjacency_list,&mut state){
+            return true;
         }
     }
 
@@ -26,14 +26,14 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
 
 }
 
-fn has_cycle(node: usize, adjacency_list: &[Vec<usize>], state: &mut [u8] ){
+fn has_cycle(node: usize, adjacency_list: &[Vec<usize>], state: &mut [u8] ) -> bool{
     state[node]=1;
     for i in 0..adjacency_list[node].len() {
-        let next = adjecency_list[node][i];
+        let next = adjacency_list[node][i];
         if state[next]==1 {
             return true;
         }
-        if state[next]==0 && has_cycle(next, adjecency_list, state) {
+        if state[next]==0 && has_cycle(next, adjacency_list, state) {
             return true;
         }
     }
