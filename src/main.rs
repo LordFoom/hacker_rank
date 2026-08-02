@@ -11,6 +11,7 @@ mod problem20;
 mod problem21;
 mod problem22;
 mod problem23;
+mod problem24;
 mod problem3;
 mod problem4;
 mod problem5;

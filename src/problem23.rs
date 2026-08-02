@@ -16,10 +16,10 @@ fn hasCircularDependency(n: i32, dependencies: &[Vec<i32>]) -> bool {
         }
     }
 
-    println!("Adjacency list of edges");
-    for edge in adjacency_list{
-        println!("{} ---> {}", edge[0], edge[1]);
-    }
+    // println!("Adjacency list of edges");
+    // for edge in adjacency_list{
+    //     println!("{} ---> {}", edge[0], edge[1]);
+    // }
     
 
     false
