@@ -1,3 +1,4 @@
+use std::collections::BTreeSet;
 /**
 * Longest Arithmetic Subsequence with Given Difference
 
@@ -31,7 +32,11 @@ Input Format
 
 */
 fn findLongestArithmeticProgression(arr: &[i32], k: i32) -> i32 {
-    // Write your code here
+    let mut sorted_num_set = BTreeSet::new();
+    arr.iter().for_each(i -> sorted_num_set.insert(i));
+    sorted_num_set.sort();
+    k
+
 
 }
 
