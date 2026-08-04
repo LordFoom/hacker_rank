@@ -33,10 +33,25 @@ Input Format
 */
 fn findLongestArithmeticProgression(arr: &[i32], k: i32) -> i32 {
     let mut sorted_num_set = BTreeSet::new();
-    arr.iter().for_each(i -> sorted_num_set.insert(i));
-    sorted_num_set.sort();
+    //keeps things sorted on insert
+    arr.iter().for_each(|i| sorted_num_set.insert(i));
+    let sorted_nums = sorted_num_set.into_iter().collect::<Vec<i32>>();
+    let mut curr_max = 0;
+    let mut first_pointer = 0;
+    let mut second_pointer = 1;
+    let mut i = 0;
+    while i < sorted_nums.len()-1 {
+        let first_num = sorted_nums[i];
+    }
+    for i in sorted_nums.keys(){
+        if i == sorted_nums.len()-1 {
+            continue
+        }
+        
+
+    }
     k
-
-
 }
+
+
 
