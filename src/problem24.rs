@@ -38,14 +38,16 @@ fn findLongestArithmeticProgression(arr: &[i32], k: i32) -> i32 {
         sorted_num_set.insert(i);
     });
     let sorted_nums = sorted_num_set.into_iter().collect::<Vec<i32>>();
+    let mut max_max = 0;
     let mut curr_max = 0;
     let mut first_pointer = 0;
     let mut second_pointer = 1;
     let mut i = 0;
     while i < sorted_nums.len()-1 {
         let first_num = sorted_nums[i];
-        for j in (i+1)..sorted_nums.len() {
-            let second_num = sorted_nums[j];
+        let second_num = sorted_nums[i+1];
+        if second_num - first_num ==k {
+            curr_max = 0; 
         }
     }
     k
